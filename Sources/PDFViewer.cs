@@ -49,11 +49,28 @@ namespace GSDocViewer
 				PDF_FullPath = value;
 				PDF_BaseName = System.IO.Path.GetFileNameWithoutExtension(value);
 
-				Ghostscript.Convert("tiffg3",
-				                    Paths.CacheFile("PDFViewer_Tiff", PDF_BaseName, "%04d.tiff"),
-				                    PDF_FullPath);
+				ConvertIf();
+			}
+		}
 
-				SetPage(1);
+		protected void ConversionComplete()
+		{
+			Sensitive = true;
+			SetPage(1);
+		}
+
+		protected void ConvertIf()
+		{
+			if ( !File.Exists(Paths.CacheFile("PDFViewer_Tiff",
+			                                  PDF_BaseName,
+			                                  "0001.tiff")) ) {
+				Sensitive = false;
+				Ghostscript.AsyncConvert(ConversionComplete,
+				                         "tiffg3",
+				                         Paths.CacheFile("PDFViewer_Tiff", PDF_BaseName, "%04d.tiff"),
+				                         PDF_FullPath);
+			} else {
+				ConversionComplete();
 			}
 		}
 

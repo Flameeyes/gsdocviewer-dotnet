@@ -18,8 +18,9 @@
  */
 
 using System;
-using Portability;
 using System.Diagnostics;
+using System.Threading;
+using Portability;
 
 namespace GSDocViewer
 {
@@ -50,6 +51,18 @@ namespace GSDocViewer
 
 			Process gs = Process.Start(ExecutablePath, commandline);
 			gs.WaitForExit();
+		}
+
+		public delegate void ConversionCompleted();
+		public static void AsyncConvert(ConversionCompleted completed, string format, string outputfile,
+		                                params string[] inputfiles)
+		{
+			Thread mythread = new Thread(new ThreadStart(delegate {
+				Convert(format, outputfile, inputfiles);
+				completed();
+			}));
+
+			mythread.Start();
 		}
 	}
 }

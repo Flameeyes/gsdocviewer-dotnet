@@ -7,7 +7,7 @@
   <import>
     <widget-library name="../bin/Debug/GSDocViewer.dll" internal="true" />
   </import>
-  <widget class="Gtk.Bin" id="GSDocViewer.Viewer" design-size="300 300">
+  <widget class="Gtk.Bin" id="GSDocViewer.Viewer" design-size="309 300">
     <action-group name="Default">
       <action id="zoom100Action">
         <property name="Type">Action</property>
@@ -39,6 +39,18 @@
         <property name="StockId">gtk-clear</property>
         <signal name="Activated" handler="OnClearActionActivated" />
       </action>
+      <action id="goBackAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-go-back</property>
+        <signal name="Activated" handler="OnGoBackActionActivated" />
+      </action>
+      <action id="goForwardAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-go-forward</property>
+        <signal name="Activated" handler="OnGoForwardActionActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Visible">False</property>
@@ -57,7 +69,9 @@
               <node type="Toolitem" action="zoomFitAction" />
               <node type="Toolitem" action="zoomInAction" />
               <node type="Toolitem" action="zoomOutAction" />
-              <node type="Toolitem" action="clearAction" />
+              <node type="Separator" />
+              <node type="Toolitem" action="goBackAction" />
+              <node type="Toolitem" action="goForwardAction" />
             </node>
           </widget>
           <packing>

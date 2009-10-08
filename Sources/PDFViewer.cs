@@ -45,7 +45,7 @@ namespace GSDocViewer
 			{
 				if ( !File.Exists(value) )
 					throw new FileNotFoundException("Unable to find PDF file", value);
-				
+
 				PDF_FullPath = value;
 				PDF_BaseName = System.IO.Path.GetFileNameWithoutExtension(value);
 
@@ -56,7 +56,7 @@ namespace GSDocViewer
 		protected void ConversionComplete()
 		{
 			Sensitive = true;
-			SetPage(1);
+			Page = 1;
 		}
 
 		protected void ConvertIf()
@@ -74,16 +74,24 @@ namespace GSDocViewer
 			}
 		}
 
-		public void SetPage(int page)
-		{
-			string page_path = Paths.CacheFile("PDFViewer_Tiff",
-			                                   PDF_BaseName,
-			                                   String.Format("{0:d4}.tiff", page));
-			
-			if ( !File.Exists(page_path) )
-				throw new OverflowException("Page not found");
+		public override int Page {
+			get {
+				return base.Page;
+			}
+			set {
+				if ( PDF_BaseName == null )
+					return;
 
-			OpenFile(page_path);
+				string page_path = Paths.CacheFile("PDFViewer_Tiff",
+				                                   PDF_BaseName,
+				                                   String.Format("{0:d4}.tiff", value));
+
+				if ( !File.Exists(page_path) )
+					throw new OverflowException("Page not found");
+
+				OpenFile(page_path);
+				base.Page = value;
+			}
 		}
 	}
 }

@@ -128,5 +128,25 @@ namespace GSDocViewer
 		{
 			imgDisplay.Pixbuf = null;
 		}
+
+		public virtual int Page
+		{ get; set; }
+
+		protected virtual void OnGoBackActionActivated (object sender, System.EventArgs e)
+		{
+			try {
+				Page = (Page-1);
+			} catch(Exception) {
+			}
+		}
+
+		protected virtual void OnGoForwardActionActivated (object sender, System.EventArgs e)
+		{
+			try {
+				Page = (Page+1);
+			} catch(Exception) {
+			}
+		}
+
 	}
 }

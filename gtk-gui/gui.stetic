@@ -33,12 +33,6 @@
         <property name="StockId">gtk-zoom-out</property>
         <signal name="Activated" handler="OnZoomOutActionActivated" />
       </action>
-      <action id="clearAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes" />
-        <property name="StockId">gtk-clear</property>
-        <signal name="Activated" handler="OnClearActionActivated" />
-      </action>
       <action id="goBackAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes" />

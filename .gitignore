@@ -1,0 +1,8 @@
+!gtk-gui/gui.stetic
+*.pidb
+*.resources
+*.userprefs
+*~
+bin
+gtk-gui
+test-results

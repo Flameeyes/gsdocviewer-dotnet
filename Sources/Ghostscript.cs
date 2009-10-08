@@ -19,6 +19,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Portability;
 
@@ -42,24 +43,41 @@ namespace GSDocViewer
 			}
 		}
 
-		public static void Convert(string format, string outputfile, params string[] inputfiles)
+		private static Regex counter = new Regex(@"Processing pages \d+ through (\d+)\.", RegexOptions.Compiled);
+
+		public static int Convert(string format, string outputfile, params string[] inputfiles)
 		{
 			string commandline = String.Format("-dNOPAUSE -dBATCH -sDEVICE={0} -sOutputFile=\"{1}\"",
 			                                   format, outputfile);
 			foreach ( string file in inputfiles )
 				commandline += String.Format(" \"{0}\"", file);
 
-			Process gs = Process.Start(ExecutablePath, commandline);
+			ProcessStartInfo sinfo = new ProcessStartInfo(ExecutablePath, commandline);
+			sinfo.RedirectStandardOutput = true;
+			sinfo.UseShellExecute = false;
+
+			Process gs = Process.Start(sinfo);
 			gs.WaitForExit();
+
+			while ( !gs.StandardOutput.EndOfStream ) {
+				string line = gs.StandardOutput.ReadLine();
+				Match linem = counter.Match(line);
+
+				if ( linem.Success )
+					return System.Convert.ToInt32(linem.Groups[1].Value);
+			}
+
+			return -1;
 		}
 
-		public delegate void ConversionCompleted();
+		public delegate void ConversionCompleted(int pages);
+
 		public static void AsyncConvert(ConversionCompleted completed, string format, string outputfile,
 		                                params string[] inputfiles)
 		{
 			Thread mythread = new Thread(new ThreadStart(delegate {
-				Convert(format, outputfile, inputfiles);
-				completed();
+				int pages = Convert(format, outputfile, inputfiles);
+				completed(pages);
 			}));
 
 			mythread.Start();

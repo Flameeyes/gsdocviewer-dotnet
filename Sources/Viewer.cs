@@ -124,13 +124,36 @@ namespace GSDocViewer
 			RedrawImage();
 		}
 
-		protected virtual void OnClearActionActivated (object sender, System.EventArgs e)
+		protected virtual void Clear()
 		{
 			imgDisplay.Pixbuf = null;
 		}
 
+		private int _page;
 		public virtual int Page
-		{ get; set; }
+		{
+			get { return _page; }
+
+			set {
+				_page = value;
+
+				goBackAction.Sensitive = (_page > 1);
+				goForwardAction.Sensitive = (_page < _pages);
+			}
+		}
+
+		private int _pages;
+		public virtual int Pages
+		{
+			get { return _pages; }
+
+			set {
+				_pages = value;
+
+				goBackAction.Sensitive = (_pages > 1);
+				goForwardAction.Sensitive = (_pages > 1);
+			}
+		}
 
 		protected virtual void OnGoBackActionActivated (object sender, System.EventArgs e)
 		{

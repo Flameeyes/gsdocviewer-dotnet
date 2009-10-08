@@ -43,6 +43,8 @@ namespace GSDocViewer
 
 			set
 			{
+				Clear();
+
 				if ( !File.Exists(value) )
 					throw new FileNotFoundException("Unable to find PDF file", value);
 
@@ -53,9 +55,10 @@ namespace GSDocViewer
 			}
 		}
 
-		protected void ConversionComplete()
+		protected void ConversionComplete(int pages)
 		{
 			Sensitive = true;
+			Pages = pages;
 			Page = 1;
 		}
 
@@ -70,7 +73,7 @@ namespace GSDocViewer
 				                         Paths.CacheFile("PDFViewer_Tiff", PDF_BaseName, "%04d.tiff"),
 				                         PDF_FullPath);
 			} else {
-				ConversionComplete();
+				ConversionComplete(Pages);
 			}
 		}
 

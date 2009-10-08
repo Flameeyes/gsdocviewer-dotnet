@@ -73,7 +73,7 @@ namespace GSDocViewer
 				                         Paths.CacheFile("PDFViewer_Tiff", PDF_BaseName, "%04d.tiff"),
 				                         PDF_FullPath);
 			} else {
-				ConversionComplete(Pages);
+				ConversionComplete(Directory.GetFiles(Paths.CacheFile("PDFViewer_Tiff", PDF_BaseName)).Length);
 			}
 		}
 

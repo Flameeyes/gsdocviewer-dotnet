@@ -97,13 +97,13 @@ namespace GSDocViewer
 		public static void AsyncConvert(ConversionCompleted completed, string format, string outputfile,
 		                                params string[] inputfiles)
 		{
-			AsyncConvert(completed, format, outputfile, inputfiles);
+			AsyncConvertInternal(completed, format, outputfile, inputfiles);
 		}
 
 		public static void AsyncConvert(ConversionCompleted completed, string format, string outputfile,
 		                                IEnumerable<string> inputfiles)
 		{
-			AsyncConvert(completed, format, outputfile, inputfiles);
+			AsyncConvertInternal(completed, format, outputfile, inputfiles);
 		}
 	}
 }

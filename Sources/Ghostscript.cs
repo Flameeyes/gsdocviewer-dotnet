@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Portability;
@@ -50,15 +51,27 @@ namespace GSDocViewer
 		{
 			string commandline = String.Format("-dNOPAUSE -dBATCH -sDEVICE={0} -sOutputFile=\"{1}\"",
 			                                   format, outputfile);
-			foreach ( string file in inputfiles )
+			foreach ( string file in inputfiles ) {
+				switch ( Path.GetExtension(file) ) {
+				case ".pdf":
+				case ".ps":
+					break;
+				default:
+					throw new System.Exception(String.Format("Unable to handle file {0}", file));
+				}
 				commandline += String.Format(" \"{0}\"", file);
+			}
 
 			ProcessStartInfo sinfo = new ProcessStartInfo(ExecutablePath, commandline);
 			sinfo.RedirectStandardOutput = true;
+			sinfo.RedirectStandardError = true;
 			sinfo.UseShellExecute = false;
 
 			Process gs = Process.Start(sinfo);
 			gs.WaitForExit();
+
+			if ( gs.ExitCode != 0 )
+				throw new System.Exception("Error executing conversion:\n" + gs.StandardOutput.ReadToEnd());
 
 			while ( !gs.StandardOutput.EndOfStream ) {
 				string line = gs.StandardOutput.ReadLine();

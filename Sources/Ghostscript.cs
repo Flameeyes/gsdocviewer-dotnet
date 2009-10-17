@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -45,7 +46,7 @@ namespace GSDocViewer
 
 		private static Regex counter = new Regex(@"Processing pages \d+ through (\d+)\.", RegexOptions.Compiled);
 
-		public static int Convert(string format, string outputfile, params string[] inputfiles)
+		private static int ConvertInternal(string format, string outputfile, IEnumerable<string> inputfiles)
 		{
 			string commandline = String.Format("-dNOPAUSE -dBATCH -sDEVICE={0} -sOutputFile=\"{1}\"",
 			                                   format, outputfile);
@@ -70,13 +71,23 @@ namespace GSDocViewer
 			return -1;
 		}
 
+		public static int Convert(string format, string outputfile, params string[] inputfiles)
+		{
+			return ConvertInternal(format, outputfile, inputfiles);
+		}
+
+		public static int Convert(string format, string outputfile, IEnumerable<string> inputfiles)
+		{
+			return ConvertInternal(format, outputfile, inputfiles);
+		}
+
 		public delegate void ConversionCompleted(int pages);
 
 		public static void AsyncConvert(ConversionCompleted completed, string format, string outputfile,
 		                                params string[] inputfiles)
 		{
 			Thread mythread = new Thread(new ThreadStart(delegate {
-				int pages = Convert(format, outputfile, inputfiles);
+				int pages = ConvertInternal(format, outputfile, inputfiles);
 				completed(pages);
 			}));
 

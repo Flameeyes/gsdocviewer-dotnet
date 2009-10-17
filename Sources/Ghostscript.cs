@@ -83,8 +83,8 @@ namespace GSDocViewer
 
 		public delegate void ConversionCompleted(int pages);
 
-		public static void AsyncConvert(ConversionCompleted completed, string format, string outputfile,
-		                                params string[] inputfiles)
+		private static void AsyncConvertInternal(ConversionCompleted completed, string format, string outputfile,
+		                                        IEnumerable<string> inputfiles)
 		{
 			Thread mythread = new Thread(new ThreadStart(delegate {
 				int pages = ConvertInternal(format, outputfile, inputfiles);
@@ -92,6 +92,18 @@ namespace GSDocViewer
 			}));
 
 			mythread.Start();
+		}
+
+		public static void AsyncConvert(ConversionCompleted completed, string format, string outputfile,
+		                                params string[] inputfiles)
+		{
+			AsyncConvert(completed, format, outputfile, inputfiles);
+		}
+
+		public static void AsyncConvert(ConversionCompleted completed, string format, string outputfile,
+		                                IEnumerable<string> inputfiles)
+		{
+			AsyncConvert(completed, format, outputfile, inputfiles);
 		}
 	}
 }

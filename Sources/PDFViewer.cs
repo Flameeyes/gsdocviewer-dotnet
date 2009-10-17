@@ -55,7 +55,7 @@ namespace GSDocViewer
 			}
 		}
 
-		protected void ConversionComplete(int pages)
+		protected void ConversionComplete(string outputfile, int pages)
 		{
 			Sensitive = true;
 			Pages = pages;
@@ -73,7 +73,7 @@ namespace GSDocViewer
 				                         Paths.CacheFile("PDFViewer_Tiff", PDF_BaseName, "%04d.tiff"),
 				                         PDF_FullPath);
 			} else {
-				ConversionComplete(Directory.GetFiles(Paths.CacheFile("PDFViewer_Tiff", PDF_BaseName)).Length);
+				ConversionComplete(null, Directory.GetFiles(Paths.CacheFile("PDFViewer_Tiff", PDF_BaseName)).Length);
 			}
 		}
 

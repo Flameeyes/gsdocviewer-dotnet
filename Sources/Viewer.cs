@@ -1,6 +1,6 @@
 /*
  * This file is part of GSDocViewer library.
- * Copyright © 2009 Diego E. Pettenò <flameeyes@gmail.com>
+ * Copyright © 2009 Diego E. Pettenò <flameeyes@flameeyes.eu>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
